@@ -1,15 +1,14 @@
-import { Button, Container, Divider, Header, Icon, Menu, MenuItem, Segment, Table, TableBody, TableCell, TableFooter, TableHeader, TableHeaderCell, TableRow } from 'semantic-ui-react';
+import { Button, Container, Divider, Header, Menu, MenuItem, Segment} from 'semantic-ui-react';
 import './Admin.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link} from 'react-router-dom';
 import { selectCurrentAdminMenu, switchMenu } from '../../redux/slices/Admin';
-import { fetchTypes, nextPage, previousPage } from '../../redux/slices/Type';
 import React from 'react';
-import Types from './MenuItems/Types/Types';
 import General from './MenuItems/General/General';
+import Properties from './MenuItems/Properties/Property';
 
 const generalMenu = "general"
-const typeMenu = "type"
+const propertyMenu = "property"
 
 function Admin() {
     const currentAdminMenu = useSelector(selectCurrentAdminMenu);
@@ -18,11 +17,11 @@ function Admin() {
 
     if(!userData?.isAdmin){
         return (
-            <Container>
-                <Header>Access denied!</Header>
+            <Container className=' text-center'>
+                <Header>У вас немає доступу!</Header>
                 <Divider />
                 <Link to="/">
-                    <Button basic color="black">Return</Button>
+                    <Button color="black">Повернутись на головну сторінку.</Button>
                 </Link>
             </Container>
         );
@@ -34,8 +33,8 @@ function Admin() {
         switch(name){
             case generalMenu:
                 return <General />
-            case typeMenu:
-                return <Types />
+            case propertyMenu:
+                return <Properties />
             default:
                 return <General />
         }
@@ -45,10 +44,6 @@ function Admin() {
 
     return (
         <div className="py-9 min-w-96 w-3/4 px-16 bg-white grid gap-4 grid-cols-1 font-medium content-center rounded-sm">
-            <div className='grid gap-4 grid-cols-1'>
-                <Header className='text-slate-50 text-3xl text-center font-sans'>Edit</Header>
-                <Divider />
-            </div>
             <div>
                 <Menu attached='top' tabular>
                     <MenuItem
@@ -56,14 +51,14 @@ function Admin() {
                     active={currentAdminMenu === generalMenu}
                     onClick={handleItemClick}
                     >
-                        General
+                        Головна
                     </MenuItem>
                     <MenuItem
-                    name={typeMenu}
-                    active={currentAdminMenu === typeMenu}
+                    name={propertyMenu}
+                    active={currentAdminMenu === propertyMenu}
                     onClick={handleItemClick}
                     >
-                        Types
+                        Характеристики
                     </MenuItem>
                 </Menu>
                 <Segment attached='bottom'>

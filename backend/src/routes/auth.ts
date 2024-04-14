@@ -1,5 +1,5 @@
 import { Express, Request, Response } from "express"; 
-const {registerValidation, loginValidation} =  require('../validators/auth.ts');
+const {registerValidation, loginValidation} =  require('../validators/authValidator');
 const {checkAuth, checkAdmin} = require('../middlewares/index.ts');
 const UserController = require('../controllers/UserController.ts');
 

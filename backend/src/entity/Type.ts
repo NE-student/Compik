@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
-import { PropertyToType } from "./PropertyToType";
+import { Property } from "./Properties/Property";
+import { CompareProperty } from "./Properties/CompareProperties/CompareProperty";
+import { ComponentCountProperty } from "./Properties/CountProperties/ComponentCountProperty";
 
 @Entity()
 export class Type {
@@ -10,6 +12,9 @@ export class Type {
     @Column({type:"character varying", unique:true, length:100})
     Name: string
 
-    @OneToMany(() => PropertyToType, propertyToType => propertyToType.type)
-    public propertyToTypes: PropertyToType[];
+    @OneToMany(() => Property, property => property.type)
+    public properties: Property[]
+
+    @OneToMany(() => CompareProperty, property => property.type)
+    compareProperties: CompareProperty[]
 }

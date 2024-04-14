@@ -2,9 +2,13 @@ import "reflect-metadata"
 import cors from "cors";
 import express, { Express} from "express";
 import { AppDataSource } from "./data-source"
+
 import { type } from "./routes/type";
 import { auth } from './routes/auth';
 import { upload } from './routes/upload';
+import { property } from "./routes/property";
+import { propertyValue } from "./routes/propertyValue";
+import { category } from "./routes/category";
 
 //Database connect and initialize
 AppDataSource.initialize().then(() => {
@@ -27,7 +31,10 @@ app.get("/", (_, res)=>{
 //Routes
 auth(app);
 upload(app);
+category(app);
+property(app);
 type(app);
+propertyValue(app);
 
 //Starting server
 app.listen(4444, ()=>{

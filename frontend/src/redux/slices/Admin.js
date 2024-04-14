@@ -1,5 +1,8 @@
 import { combineSlices, createSlice } from "@reduxjs/toolkit";
 import { typeSlice } from "./Type";
+import { propertySlice } from "./Property";
+import { propertyValueSlice } from "./PropertyValue";
+import { categorySlice } from "./Category";
 
 
 
@@ -22,7 +25,7 @@ const adminSlice = createSlice({
 
 
 
-export const adminReducer = combineSlices(adminSlice, typeSlice);
+export const adminReducer = combineSlices(adminSlice, typeSlice, propertySlice, propertyValueSlice, categorySlice);
 export const selectCurrentAdminMenu = state => state.admin.adminRoot.currentMenu;
 
 export const {switchMenu} = adminSlice.actions;

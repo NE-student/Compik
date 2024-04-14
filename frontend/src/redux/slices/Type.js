@@ -8,26 +8,7 @@ export const fetchTypes = createAsyncThunk("type/fetchTypes", async(page) =>{
     return data;
 })
 
-export const createType = createAsyncThunk("type/createType", async(params) =>{
-    const {data} = await axios.post("type", params).catch((error) => {
-        console.log(error);
-      });
-    return data;
-})
 
-export const updateType = createAsyncThunk("type/updateType", async(params) =>{
-    const {data} = await axios.patch("type/" + params.id, params).catch((error) => {
-        console.log(error);
-      });
-    return data;
-})
-
-export const removeType = createAsyncThunk("type/removeType", async(id) =>{
-    const {data} = await axios.delete("type/" + id).catch((error) => {
-        console.log(error);
-      });
-    return data;
-})
 
 const initialState = {
     types: null,
@@ -60,45 +41,6 @@ export const typeSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(fetchTypes.rejected, (state, action) =>{
-            state.error = action.payload;
-            state.loading = false;
-        });
-
-        //Create type
-        builder.addCase(createType.pending, (state) =>{
-            state.error = null;
-            state.loading = true;
-        });
-        builder.addCase(createType.fulfilled, (state, action) =>{
-            state.loading = false;
-        });
-        builder.addCase(createType.rejected, (state, action) =>{
-            state.error = action.payload;
-            state.loading = false;
-        });
-
-        //Update type
-         builder.addCase(updateType.pending, (state) =>{
-            state.error = null;
-            state.loading = true;
-        });
-        builder.addCase(updateType.fulfilled, (state, action) =>{
-            state.loading = false;
-        });
-        builder.addCase(updateType.rejected, (state, action) =>{
-            state.error = action.payload;
-            state.loading = false;
-        });
-
-        //Delete type
-        builder.addCase(removeType.pending, (state) =>{
-            state.error = null;
-            state.loading = true;
-        });
-        builder.addCase(removeType.fulfilled, (state, action) =>{
-            state.loading = false;
-        });
-        builder.addCase(removeType.rejected, (state, action) =>{
             state.error = action.payload;
             state.loading = false;
         });

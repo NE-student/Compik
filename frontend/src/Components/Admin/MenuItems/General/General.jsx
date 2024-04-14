@@ -3,12 +3,10 @@ import React from 'react';
 
 
 function General() {
-
-
     
     return (
         <>
-        General menu
+          Головна сторінка.
         </>
       );
 }

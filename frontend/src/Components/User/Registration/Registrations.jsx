@@ -41,12 +41,12 @@ function Registration() {
   {!registerSuccess?
     <div className="py-9 min-w-96 w-1/5 px-16 bg-white grid gap-4 grid-cols-1 font-medium content-center rounded-3xl">
       <div className='grid gap-4 grid-cols-1'>
-        <Header className='text-slate-50 text-3xl text-center font-sans'>Create Account</Header>
+        <Header className='text-slate-50 text-3xl text-center font-sans'>Реєстрація</Header>
       </div>
       <Divider />
       <Form onSubmit={handleSubmit(OnSubmit)}>
         <FormField className=''>
-          <label className='text-slate-50'>Nickname:</label>
+          <label className='text-slate-50'>Нік:</label>
           <input {...register("Nickname", {required: "Nickname is required.", })} className='pl-2 w-full border-2 rounded font-normal' placeholder='example@gmail.com'/>
         </FormField>
         <FormField className=''>
@@ -54,7 +54,7 @@ function Registration() {
           <input {...register("email", {required: "Email is required.", })} className='pl-2 w-full border-2 rounded font-normal' placeholder='example@gmail.com'/>
         </FormField>
         <FormField>
-          <label className='text-slate-50'>Password:</label>
+          <label className='text-slate-50'>Пароль:</label>
           <input {...register("password", {required: "Password is required.", })} className='pl-2 w-full border-2 rounded font-normal' type='password'/>
         </FormField>
         <div className='flex items-center justify-center'>
@@ -63,7 +63,7 @@ function Registration() {
             type="submit"
             className=" transition ease-in-out delay-15 hover:scale-110 duration-200 text-white w-1/2 min-h-6 rounded-lg"
           >
-            Create
+            Зареєструватись
           </Button>
         </div>
       </Form>
@@ -71,11 +71,11 @@ function Registration() {
       :
       <div className="py-9 min-w-96 w-1/5 px-16 bg-white grid gap-4 grid-cols-1 font-medium content-center rounded-3xl">
       <div className='grid gap-4 grid-cols-1'>
-        <Header className='text-slate-50 text-3xl text-center font-sans'>Step 2. Verification.</Header>
+        <Header className='text-slate-50 text-3xl text-center font-sans'>Крок 2. Верифікація.</Header>
       </div>
       <Divider />
       <Container>
-        Congratulations, step 1 is completed! To complete registration looking for an letter in your email box from PC_Configuration. Until you don't verify your email, you won't login.
+        Вітаю, крок 1 завершений! Перевірте пошту, та знайдіть лист від PC_Configurator, та перейдіть за посиланням в ньому, щоб завершити реєстрацію(Поки крок 2 не завершиться, ваші можливості будуть обмежені).
       </Container>
       </div>}
     </>

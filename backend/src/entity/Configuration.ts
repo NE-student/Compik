@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, ManyToOne } from "typeorm"
-import { PropertyToType } from "./PropertyToType";
 import { Component } from "./Сomponent";
 import { User } from "./User";
 
@@ -34,6 +33,4 @@ export class Configuration {
     @ManyToOne(() => User, user => user.configurations)
     author: User
 
-    // @OneToMany(() => PropertyToType, propertyToType => propertyToType.type)
-    // public propertyToTypes: PropertyToType[];
 }

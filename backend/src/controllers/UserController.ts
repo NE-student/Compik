@@ -2,10 +2,10 @@ import { body, validationResult } from "express-validator";
 import {compare, genSalt, hash} from 'bcrypt';
 import {randomBytes} from "crypto";
 import jwt from "jsonwebtoken";
-const { sendVerificationMail } = require("../mail/sendVerificationMail");
 import { AppDataSource } from '../data-source';
 import { User } from '../entity/User';
 import { Request, Response } from "express";
+const { sendVerificationMail } = require("../mail/sendVerificationMail");
 
 
 const userRepository = AppDataSource.getRepository(User);
@@ -153,7 +153,7 @@ export const login = async(req:Request, res:Response) =>{
 export const getMe = async(req:Request, res: Response)=>{
     try{
         const user = await userRepository.findOneBy({
-            id: req.body.id
+            id: req.body.userId
         });
         if(!user){
             return res.status(404).json({success: false, message:"User not found"});

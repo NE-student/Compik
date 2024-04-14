@@ -7,11 +7,10 @@ export default (req:Request, res:Response, next:NextFunction) =>{
         
         try{
             const decoded = jwt.verify(token, process.env.SECRET_KEY as string) as JwtPayload;
-            req.body.id = decoded.id;
+            req.body.userId = decoded.id;
             next();
         }
         catch(err){
-            
             return res.status(403).json({success:false, message:"Access denied.", err});
         }
     }

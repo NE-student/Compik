@@ -8,7 +8,7 @@ const userRepository = AppDataSource.getRepository(User);
 export default async(req:Request, res:Response, next:NextFunction) =>{
     
     let user = await userRepository.findOneBy({
-        id: req.body.id,
+        id: req.body.userId,
     });
     
     if(!user){

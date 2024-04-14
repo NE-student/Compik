@@ -1,13 +1,13 @@
-import { Container, Dimmer, Grid, GridColumn, GridRow, Header, Loader, Segment, Transition } from 'semantic-ui-react';
-import './Types.css';
+import { Container, Dimmer, Grid, GridColumn, GridRow, Loader, Transition } from 'semantic-ui-react';
+import './Property.css';
 import { useSelector } from 'react-redux';
 import React from 'react';
-import TypeView from './View/TypeView';
-import TypeCreate from './Create/TypeCreate';
+import PropertyView from './View/PropertyView';
+import PropertyCreate from './Create/PropertyCreate';
 
-function Types() {
+function Properties() {
     
-    const typesData = useSelector(state => state.admin.type);
+    const propertiesData = useSelector(state => state.admin.property);
 
     
     return (
@@ -16,10 +16,10 @@ function Types() {
                 <Grid columns={2}>
                     <GridRow>
                         <GridColumn>
-                            <Transition visible={!typesData.loading} animation='fade' duration={500}>
-                                <TypeView typesData={typesData} />
+                            <Transition visible={!propertiesData.loading} animation='fade' duration={500}>
+                                <PropertyView propertiesData={propertiesData} />
                             </Transition>
-                            <Transition className="z-10" visible={typesData.loading} animation='fade' duration={500}>
+                            <Transition className="z-10" visible={propertiesData.loading} animation='fade' duration={500}>
                                 <Container>
                                     <Dimmer active>
                                     <Loader />
@@ -28,7 +28,7 @@ function Types() {
                             </Transition>
                         </GridColumn>
                         <GridColumn>
-                            <TypeCreate typesData={typesData} />
+                            <PropertyCreate propertiesData={propertiesData} />
                         </GridColumn>
                     </GridRow>
                 </Grid>
@@ -37,4 +37,4 @@ function Types() {
       );
 }
 
-export default Types;
+export default Properties;

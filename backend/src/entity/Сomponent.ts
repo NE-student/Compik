@@ -1,6 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from "typeorm"
-import { PropertyToType } from "./PropertyToType";
-import { CategoryToProperty } from "./CategoryToProperty";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "typeorm"
+import { ComponentProperty } from "./Properties/ComponentProperty"
+import { Category } from "./Category"
+import { ComponentCompareProperty } from "./Properties/CompareProperties/ComponentCompareProperty"
+import { ComponentCountProperty } from "./Properties/CountProperties/ComponentCountProperty"
 
 @Entity()
 export class Component {
@@ -11,26 +13,27 @@ export class Component {
     @Column({type:"character varying", unique:true, length:100})
     Name: string
 
-    @Column({type:"character varying", unique:true})
+    @Column({type:"character varying"})
     Description: string
 
-    @Column({type:"character varying", unique:true, array:true})
-    Photo: string
+    @Column({type:"character varying", array:true})
+    Photos: string[]
 
-    @Column({type:"int", unique:true})
-    Rate: string
-
-    @Column({type:"money", unique:true})
+    @Column({type:"money"})
     Price: number
 
-    @CreateDateColumn()
-    created_at: Date
     
-    @UpdateDateColumn()
-    updated_at: Date
+    @OneToMany(() => ComponentProperty, component_property => component_property.component)
+    properties: ComponentProperty[]
+    
+    @OneToMany(() => ComponentCompareProperty, ccp => ccp.component)
+    compareProperties: ComponentCompareProperty[]
+    
+    @OneToMany(() => ComponentCountProperty, ccp => ccp.component)
+    countProperties: ComponentCountProperty[]
+    
+    @ManyToOne(() => Category, category => category.components)
+    category: Category
 
-    @ManyToMany(() => CategoryToProperty)
-    @JoinTable()
-    categoryProperties: CategoryToProperty[]
 
 }

@@ -13,7 +13,7 @@ function Verification() {
   
   React.useEffect(()=>{
     dispatch(fetchEmailVerify(emailToken));
-  },[])
+  },[dispatch, emailToken])
   
   const isAuth = useSelector(selectIsAuth);
   const Nickname = useSelector(state => state.auth.user?.Nickname)
@@ -28,18 +28,18 @@ function Verification() {
         <Container>
           <Header className='text-slate-50 text-3xl text-center font-sans'>Verifying...</Header>
           <Divider />
-          <p>Please wait few minutes {":)"}</p>
+          <p>Зачекайте трохи {":)"}</p>
         </Container> 
         :
         <Container>
         <Header className='text-slate-50 text-3xl text-center font-sans'>Congratulation!</Header>
         <Divider />
-        <p>Welcome to Compik, dear {Nickname} :D</p>
+        <p>Вітаю на сайті конфігурацію комп'ютера Compik, {Nickname} :D</p>
         <Link to="/">
           <Button
             color='pink'
             className=" transition ease-in-out delay-15 hover:scale-110 duration-200 text-white w-1/2 min-h-6 rounded-lg">
-              Return to configuration
+              Повернутись на головну сторінку.
           </Button>
         </Link>
         </Container>

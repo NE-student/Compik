@@ -37,7 +37,7 @@ function Login() {
     <div className="py-9 min-w-96 w-1/5 px-16 bg-white grid gap-4 grid-cols-1 font-medium content-center rounded-3xl">
         <div className="grid gap-4 grid-cols-1">
           <Header className="text-slate-50 text-3xl text-center font-sans">
-            Login to account
+            Вхід в акаунт
           </Header>
         </div>
         <Divider />
@@ -52,7 +52,7 @@ function Login() {
           />
         </FormField>
         <FormField>
-          <label className="text-slate-50">Password:</label>
+          <label className="text-slate-50">Пароль:</label>
           <input
             className="pl-2 w-full border-2 rounded font-normal"
             {...register("password", {required: "Password is required.", })}
@@ -65,7 +65,7 @@ function Login() {
             type="submit"
             className=" transition ease-in-out delay-15 hover:scale-110 duration-200 text-white w-1/2 min-h-6 rounded-lg"
           >
-            Login
+            Увійти
           </Button>
         </div>
       </Form>
