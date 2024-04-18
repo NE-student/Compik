@@ -9,6 +9,7 @@ import { upload } from './routes/upload';
 import { property } from "./routes/property";
 import { propertyValue } from "./routes/propertyValue";
 import { category } from "./routes/category";
+import { component } from "./routes/component";
 
 //Database connect and initialize
 AppDataSource.initialize().then(() => {
@@ -35,6 +36,7 @@ category(app);
 property(app);
 type(app);
 propertyValue(app);
+component(app);
 
 //Starting server
 app.listen(4444, ()=>{

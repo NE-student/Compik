@@ -1,14 +1,14 @@
 import './PropertyView.css';
 import { useDispatch, useSelector } from 'react-redux';
 import React from 'react';
-import { fetchProperties, nextPage, previousPage, removeProperty, updateProperty } from '../../../../../redux/slices/Property';
+import { fetchProperties, nextPage, previousPage, removeProperty, updateProperty } from 'MyRedux/slices/Property';
+import { createPropertyValue, fetchPropertyValues, resetPage as resetValuePage, nextPage as nextValuePage, previousPage as previousValuePage } from 'MyRedux/slices/PropertyValue';
+import { fetchTypes } from 'MyRedux/slices/Type';
 import { useForm } from 'react-hook-form';
 import TableView from '../../../../Tools/TableView/TableView';
 import ModalOfObject from '../../../../Tools/ModalOfObject/ModalOfObject';
 import TableVED from '../../../../Tools/TableVED/TableVED';
-import { createPropertyValue, fetchPropertyValues, resetPage as resetValuePage, nextPage as nextValuePage, previousPage as previousValuePage } from '../../../../../redux/slices/PropertyValue';
 import DropdownRelation from '../../../../Tools/DropdownRelation/DropdownRelation';
-import { fetchTypes } from '../../../../../redux/slices/Type';
 import { Divider, Header } from 'semantic-ui-react';
 
 

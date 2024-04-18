@@ -2,12 +2,14 @@ import { Button, Container, Divider, Header, Menu, MenuItem, Segment} from 'sema
 import './Admin.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link} from 'react-router-dom';
-import { selectCurrentAdminMenu, switchMenu } from '../../redux/slices/Admin';
+import { selectCurrentAdminMenu, switchMenu } from 'MyRedux/slices/Admin';
 import React from 'react';
 import General from './MenuItems/General/General';
 import Properties from './MenuItems/Properties/Property';
+import Component from './MenuItems/Components/Component';
 
 const generalMenu = "general"
+const componentMenu = "component"
 const propertyMenu = "property"
 
 function Admin() {
@@ -35,6 +37,8 @@ function Admin() {
                 return <General />
             case propertyMenu:
                 return <Properties />
+            case componentMenu:
+                return <Component />
             default:
                 return <General />
         }
@@ -52,6 +56,13 @@ function Admin() {
                     onClick={handleItemClick}
                     >
                         Головна
+                    </MenuItem>
+                    <MenuItem
+                    name={componentMenu}
+                    active={currentAdminMenu === componentMenu}
+                    onClick={handleItemClick}
+                    >
+                        Комплектуючі
                     </MenuItem>
                     <MenuItem
                     name={propertyMenu}

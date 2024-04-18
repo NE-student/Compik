@@ -17,6 +17,9 @@ export class Category {
     @Column({type:"character varying"})
     Description: string
 
+    @Column({type:"character varying", nullable:true})
+    Photos: string[]
+
     @OneToMany(() => Property, property => property.category)
     properties: Property[]
 

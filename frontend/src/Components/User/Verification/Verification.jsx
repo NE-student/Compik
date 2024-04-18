@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import './Verification.css';
-import { fetchEmailVerify, selectIsAuth } from '../../../redux/slices/Auth';
+import { fetchEmailVerify, selectIsAuth } from 'MyRedux/slices/Auth';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Container, Divider, Header } from 'semantic-ui-react';

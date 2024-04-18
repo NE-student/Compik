@@ -3,10 +3,10 @@ import './PropertyCreate.css';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { createProperty, fetchProperties } from '../../../../../redux/slices/Property';
+import { createProperty, fetchProperties } from 'MyRedux/slices/Property';
 import DropdownRelation from '../../../../Tools/DropdownRelation/DropdownRelation'
-import { fetchTypes } from '../../../../../redux/slices/Type';
-import { fetchCategories } from '../../../../../redux/slices/Category';
+import { fetchTypes } from 'MyRedux/slices/Type';
+import { fetchCategories } from 'MyRedux/slices/Category';
 
 
 
@@ -67,6 +67,7 @@ function PropertyCreate(props) {
             <FormField>
                 <label className="text-slate-50">Ім'я:</label>
                 <input
+                    autoFocus
                     {...register("Name", {required: "Name is required.", })}
                     className="pl-2 w-full border-2 rounded font-normal"
                     placeholder="Сокет"

@@ -122,7 +122,7 @@ export const getComponentProperties =  async (req:Request, res:Response) => {
     let itemsPerPage = 10;
 
     const component = await componentRepository.findOneBy({
-        id: req.body.componentId
+        id: req.body.id
     });
     if (!component) return res.status(404).json({success:false, message: "Component wasn't found"});
 
@@ -149,3 +149,31 @@ export const getComponentProperties =  async (req:Request, res:Response) => {
     res.end(json);
 };
 
+export const getPropertiesByCategory = async (req: Request, res:Response) => {
+
+
+
+    const properties = await propertyRepository.find({
+        category: req.body.id
+    });
+
+
+
+    let componentProperties =
+        await propertyRepository
+        .createQueryBuilder("property")
+        .leftJoinAndSelect("property.category", "category")
+        .where("property.category.id = :id", {id: req.body.id})
+        .leftJoinAndSelect("property.values", "values")
+        .orderBy('property.id')
+        .getMany();
+    
+
+    if(!componentProperties){
+        return res.status(404).json({success:false, message: "Component's properties were not found"})
+    }
+
+    var json = JSON.stringify({data:componentProperties, success:true});
+    res.writeHead(200, {'content-Property':'application/json', 'content-length':Buffer.byteLength(json)}); 
+    res.end(json);
+}

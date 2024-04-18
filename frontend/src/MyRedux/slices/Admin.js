@@ -3,6 +3,7 @@ import { typeSlice } from "./Type";
 import { propertySlice } from "./Property";
 import { propertyValueSlice } from "./PropertyValue";
 import { categorySlice } from "./Category";
+import { componentSlice } from "./Component";
 
 
 
@@ -25,7 +26,7 @@ const adminSlice = createSlice({
 
 
 
-export const adminReducer = combineSlices(adminSlice, typeSlice, propertySlice, propertyValueSlice, categorySlice);
+export const adminReducer = combineSlices(adminSlice, typeSlice, propertySlice, propertyValueSlice, categorySlice, componentSlice);
 export const selectCurrentAdminMenu = state => state.admin.adminRoot.currentMenu;
 
 export const {switchMenu} = adminSlice.actions;

@@ -9,7 +9,8 @@ import Configurations from './Components/Configurations/Configurations';
 import Admin from './Components/Admin/Admin';
 import React from 'react';
 import { useDispatch} from 'react-redux';
-import { fetchAuthMe} from './redux/slices/Auth';
+import { fetchAuthMe} from "MyRedux/slices/Auth";
+import Footer from './Components/Footer/Footer';
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path='/emailVerify' element={<Verification />} />
         <Route path='/admin' element={<Admin />} />
       </Routes>
+      <Footer />
     </div>
   );
 }

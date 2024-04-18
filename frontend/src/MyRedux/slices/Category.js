@@ -1,8 +1,8 @@
-import axios from "../../axios"
+import axios from "../../axiosInstance"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const fetchTypes = createAsyncThunk("type/fetchTypes", async(page) =>{
-    const {data} = await axios.get("types/" + page).catch(function (error) {
+export const fetchCategories = createAsyncThunk("category/fetchCategories", async(page) =>{
+    const {data} = await axios.get("categories/" + page).catch(function (error) {
         console.log(error.toJSON());
       });
     return data;
@@ -11,14 +11,14 @@ export const fetchTypes = createAsyncThunk("type/fetchTypes", async(page) =>{
 
 
 const initialState = {
-    types: null,
+    categories: null,
     loading: false,
     error: null,
     currentPage: 1
 };
 
-export const typeSlice = createSlice({
-    name: "type",
+export const categorySlice = createSlice({
+    name: "category",
     initialState,
     reducers: {
         nextPage : (state) =>{
@@ -31,20 +31,20 @@ export const typeSlice = createSlice({
     },
     extraReducers: (builder) => {
         //Paginate types
-        builder.addCase(fetchTypes.pending, (state) =>{
-            state.types = null;
+        builder.addCase(fetchCategories.pending, (state) =>{
+            state.categories = null;
             state.error = null;
             state.loading = true;
         });
-        builder.addCase(fetchTypes.fulfilled, (state, action) =>{
-            state.types = action.payload;
+        builder.addCase(fetchCategories.fulfilled, (state, action) =>{
+            state.categories = action.payload;
             state.loading = false;
         });
-        builder.addCase(fetchTypes.rejected, (state, action) =>{
+        builder.addCase(fetchCategories.rejected, (state, action) =>{
             state.error = action.payload;
             state.loading = false;
         });
     }
 });
 
-export const {nextPage, previousPage} = typeSlice.actions;
+export const {nextPage, previousPage} = categorySlice.actions;

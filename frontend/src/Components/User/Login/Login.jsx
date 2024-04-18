@@ -2,7 +2,7 @@ import "./Login.css";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useForm } from "react-hook-form";
-import { fetchAuth, selectIsAuth } from "../../../redux/slices/Auth";
+import { fetchAuth, selectIsAuth } from "MyRedux/slices/Auth";
 import { Navigate } from "react-router-dom";
 
 import { FormField, Form, Header, Divider, Button } from 'semantic-ui-react'

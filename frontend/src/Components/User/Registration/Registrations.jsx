@@ -3,7 +3,7 @@ import './Registration.css';
 import { useDispatch, useSelector } from "react-redux";
 
 import { useForm } from "react-hook-form";
-import { fetchRegister, selectIsAuth } from "../../../redux/slices/Auth";
+import { fetchRegister, selectIsAuth } from "MyRedux/slices/Auth";
 import { Navigate } from "react-router-dom";
 import { FormField, Form, Header, Divider, Button, Container } from 'semantic-ui-react'
 

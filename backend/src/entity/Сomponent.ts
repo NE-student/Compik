@@ -19,7 +19,7 @@ export class Component {
     @Column({type:"character varying", array:true})
     Photos: string[]
 
-    @Column({type:"money"})
+    @Column({type:"numeric"})
     Price: number
 
     

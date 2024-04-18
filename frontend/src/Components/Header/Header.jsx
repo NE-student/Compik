@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./Header.css";
 import { Link, useNavigate } from "react-router-dom";
-import { logout, selectIsAuth } from "../../redux/slices/Auth";
+import { logout, selectIsAuth } from "MyRedux/slices/Auth";
 import {
   Button,
   Dropdown,
