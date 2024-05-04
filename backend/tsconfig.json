@@ -11,6 +11,6 @@
       "forceConsistentCasingInFileNames": true,
       "strictPropertyInitialization": false,
     },
-    "include": ["src/**/*.ts"],
+    "include": ["src/**/*.ts", "src/middlewares/index.ts"],
     "exclude": ["node_modules"]
 }

@@ -61,7 +61,7 @@ function TableView(props) {
             
                 <TableFooter>
                     <TableRow>
-                        <TableHeaderCell colSpan='3'>
+                        <TableHeaderCell colSpan={ColumnsKeys.length}>
                         <Menu floated='right' pagination>
                             <MenuItem as='a' icon onClick={() => onLeftArrClick()}>
                                 <Icon name='chevron left' />

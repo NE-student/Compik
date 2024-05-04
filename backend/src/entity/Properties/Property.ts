@@ -3,7 +3,6 @@ import {Type} from "../Type";
 import { PropertyValues } from "./PropertyValues";
 import { Category } from "../Category";
 import { ComponentProperty } from "./ComponentProperty";
-import { CountProperty } from "./CountProperties/CountProperty";
 
 @Entity()
 export class Property {
@@ -22,9 +21,6 @@ export class Property {
     
     @OneToMany(() => ComponentProperty, component_property => component_property.property)
     components: ComponentProperty[]
-
-    @OneToMany(() => CountProperty, cp => cp.impactProperty)
-    countProperties: CountProperty
     
     @ManyToOne(() => Type, type => type.properties)
     type: Type

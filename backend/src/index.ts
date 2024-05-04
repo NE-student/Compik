@@ -2,7 +2,6 @@ import "reflect-metadata"
 import cors from "cors";
 import express, { Express} from "express";
 import { AppDataSource } from "./data-source"
-
 import { type } from "./routes/type";
 import { auth } from './routes/auth';
 import { upload } from './routes/upload';
@@ -10,6 +9,9 @@ import { property } from "./routes/property";
 import { propertyValue } from "./routes/propertyValue";
 import { category } from "./routes/category";
 import { component } from "./routes/component";
+import { compareProperty } from "./routes/compareProperty";
+import { comparePropertyValue } from "./routes/comparePropertyValue";
+import { comparePropertyImpactCategory } from "./routes/comparePropertyImpactCategory";
 
 //Database connect and initialize
 AppDataSource.initialize().then(() => {
@@ -36,6 +38,9 @@ category(app);
 property(app);
 type(app);
 propertyValue(app);
+compareProperty(app);
+comparePropertyValue(app);
+comparePropertyImpactCategory(app);
 component(app);
 
 //Starting server

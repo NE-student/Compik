@@ -62,25 +62,34 @@ export const createProperty = async(req: Request, res: Response) =>{
 }
 
 export const updateProperty = async(req: Request, res: Response) =>{
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(400).json(errors.array());
-    }
-
-    const id = +(req.params.id)
-    const property = await PropertyRepository.save({
-        id: id,
-        Name: req.body.Name,
-        Description: req.body.description,
-        type: req.body.typeId,
-        category: req.body.category
-    });
+    try{
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json(errors.array());
+        }
     
-    return res.status(200).json({
-        success:true,
-        id: property.id,
-        Name: property.Name
-    });
+        const id = +(req.params.id)
+        const property = await PropertyRepository.save({
+            id: id,
+            Name: req.body.Name,
+            Description: req.body.description,
+            type: req.body.type,
+            category: req.body.category
+        });
+        
+        return res.status(200).json({
+            success:true,
+            id: property.id,
+            Name: property.Name
+        });
+    }
+    catch(err:any){
+        console.log(err);
+        return res.status(500).json({
+            message: "Something went wrong... Try again later.",
+            detail: err.detail});
+    }
+    
 }
 
 export const removeProperty = async(req: Request, res: Response) =>{
@@ -102,16 +111,59 @@ export const removeProperty = async(req: Request, res: Response) =>{
 }
 
 export const getProperties =  async (req:Request, res:Response) => {
-    const page = +(req.params.page);
-    let itemsPerPage = 10;
-    const properties = await PropertyRepository.createQueryBuilder("Property").leftJoinAndSelect("Property.type", "type").leftJoinAndSelect("Property.category", "category").limit(itemsPerPage).offset((page - 1) * itemsPerPage).orderBy("Property.id").getMany();
+    try{
+        const page = +(req.params.page);
+        let itemsPerPage = 10;
+        const properties = await PropertyRepository
+            .createQueryBuilder("Property")
+            .leftJoinAndSelect("Property.type", "type")
+            .leftJoinAndSelect("Property.category", "category")
+            .limit(itemsPerPage)
+            .offset((page - 1) * itemsPerPage)
+            .orderBy("Property.id")
+            .getMany();
+    
+        if(!properties){
+            return res.status(404).json({success:false, message: "Properties were not found"})
+        }
+    
+        var json = JSON.stringify({data:properties, page, success:true});
+        res.writeHead(200, {'content-Property':'application/json', 'content-length':Buffer.byteLength(json)}); 
+        res.end(json);
+    }
+    catch(err:any){
+        console.log(err);
+        return res.status(500).json({
+            message: "Something went wrong... Try again later.",
+            detail: err.detail});
+    }
+    
+};
 
-    if(!properties){
-        return res.status(404).json({success:false, message: "Properties were not found"})
+export const getPropertiesByCategory = async (req: Request, res:Response) => {
+    try{
+        let componentProperties =
+            await PropertyRepository
+            .createQueryBuilder("property")
+            .leftJoinAndSelect("property.type", "type")
+            .leftJoinAndSelect("property.category", "category")
+            .where("property.category.id = :id", {id: req.params.category})
+            .leftJoinAndSelect("property.values", "values")
+            .orderBy('property.id')
+            .getMany();
+        
+        if(!componentProperties || componentProperties.length == 0){
+            return res.status(404).json({success:false, message: "Component's properties were not found"})
+        }
+        var json = JSON.stringify({data:componentProperties, success:true});
+        res.writeHead(200, {'content-Property':'application/json', 'content-length':Buffer.byteLength(json)}); 
+        res.end(json);
+    }catch(err:any){
+        console.log(err);
+        return res.status(500).json({
+            message: "Something went wrong... Try again later.",
+            detail: err.detail});
     }
 
-    var json = JSON.stringify({data:properties, page, success:true});
-    res.writeHead(200, {'content-Property':'application/json', 'content-length':Buffer.byteLength(json)}); 
-    res.end(json);
-};
+}
 

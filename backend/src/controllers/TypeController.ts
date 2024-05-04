@@ -24,7 +24,6 @@ export const getType = async(req: Request, res: Response) =>{
 }
 
 export const getTypes =  async (req:Request, res:Response) => {
-
     const page = +(req.params.page);
     let itemsPerPage = 5;
     let types;

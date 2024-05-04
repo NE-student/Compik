@@ -35,7 +35,7 @@ function Header() {
   };
 
   return (
-    <header className="justify-self-start grid grid-cols-3 min-h-16 max-h-32 items-center bg-primary font-medium py-3 px-4 w-screen rounded-3 shadow-lg ring-1 ring-gray-900/5">
+    <header className=" flex-initial grid grid-cols-3 w-full min-h-24 max-h-32 items-center bg-primary font-medium py-3 px-4 rounded-3 shadow-lg ring-1 ring-gray-900/5">
       <Link to="/">
         <div className="text-white fill-white  p-2 justify-self-start flex flex-row items-center space-x-3 transition ease-in-out delay-15 hover:text-text2 hover:fill-text2">
           <img
@@ -104,7 +104,7 @@ function Header() {
         <div className=" min-w-28 justify-self-end grid grid-cols-1 gap-2">
           <Link to="/login">
             <Button
-              color="pink"
+              style={{background:"#64a2ff", color:"white"}}
               className=" min-w-4 min-h-6 w-full transition ease-in-out delay-15 hover:scale-110 duration-200"
               type="button"
             >

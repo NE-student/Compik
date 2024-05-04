@@ -9,19 +9,19 @@ export class ComponentProperty{
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({nullable: true})
-    numberValue: number
+    // @Column({nullable: true})
+    // numberValue: number
 
-    @Column({nullable: true})
+    @Column({nullable: true, default: false})
     boolValue: boolean
 
-    @ManyToOne(() => PropertyValues, propertyValues => propertyValues.component_properties)
+    @ManyToOne(() => PropertyValues, propertyValues => propertyValues.component_properties, {nullable: true})
     value: PropertyValues
 
     @ManyToOne(() => Property, property => property.components)
     property: Property
 
-    @ManyToOne(() => Component, component => component.properties)
+    @ManyToOne(() => Component, component => component.properties, {onDelete:"CASCADE", onUpdate:"CASCADE"})
     component: Component
 
 }

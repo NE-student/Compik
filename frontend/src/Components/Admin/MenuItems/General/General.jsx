@@ -6,10 +6,10 @@ import React from 'react';
 function General() {
     
     return (
-        <>
+        <div className=' grow'>
           Головна сторінка.
           
-        </>
+        </div>
       );
 }
 

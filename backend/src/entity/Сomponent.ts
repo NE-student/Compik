@@ -2,7 +2,6 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "ty
 import { ComponentProperty } from "./Properties/ComponentProperty"
 import { Category } from "./Category"
 import { ComponentCompareProperty } from "./Properties/CompareProperties/ComponentCompareProperty"
-import { ComponentCountProperty } from "./Properties/CountProperties/ComponentCountProperty"
 
 @Entity()
 export class Component {
@@ -23,14 +22,11 @@ export class Component {
     Price: number
 
     
-    @OneToMany(() => ComponentProperty, component_property => component_property.component)
+    @OneToMany(() => ComponentProperty, component_property => component_property.component, {onDelete: "CASCADE", onUpdate: "CASCADE"})
     properties: ComponentProperty[]
     
-    @OneToMany(() => ComponentCompareProperty, ccp => ccp.component)
+    @OneToMany(() => ComponentCompareProperty, ccp => ccp.component, {onDelete: "CASCADE", onUpdate: "CASCADE"})
     compareProperties: ComponentCompareProperty[]
-    
-    @OneToMany(() => ComponentCountProperty, ccp => ccp.component)
-    countProperties: ComponentCountProperty[]
     
     @ManyToOne(() => Category, category => category.components)
     category: Category

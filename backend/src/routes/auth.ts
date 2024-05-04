@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express"; 
 const {registerValidation, loginValidation} =  require('../validators/authValidator');
-const {checkAuth, checkAdmin} = require('../middlewares/index.ts');
+const {checkAuth, checkAdmin} = require('../middlewares/index');
 const UserController = require('../controllers/UserController.ts');
 
 export const auth = (app:Express)=>{

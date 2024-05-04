@@ -12,8 +12,7 @@ import { ComponentProperty } from "./entity/Properties/ComponentProperty";
 import { CompareProperty } from "./entity/Properties/CompareProperties/CompareProperty";
 import { ComparePropertyValue } from "./entity/Properties/CompareProperties/ComparePropertyValue";
 import { ComponentCompareProperty } from "./entity/Properties/CompareProperties/ComponentCompareProperty";
-import { CountProperty } from "./entity/Properties/CountProperties/CountProperty";
-import { ComponentCountProperty } from "./entity/Properties/CountProperties/ComponentCountProperty";
+import { ComparePropertyImpactCategory } from "./entity/Properties/CompareProperties/ComparePropertyImpactCategory";
 
 dotenv.config();
 
@@ -29,8 +28,7 @@ export const AppDataSource = new DataSource({
     entities: [
         Type, Category,
         Property, PropertyValues, ComponentProperty,
-        CompareProperty, ComparePropertyValue, ComponentCompareProperty,
-        CountProperty, ComponentCountProperty,
+        CompareProperty, ComparePropertyImpactCategory, ComparePropertyValue, ComponentCompareProperty,
         Component, User, Configuration],
     migrations: [],
     subscribers: [],

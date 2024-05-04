@@ -6,12 +6,15 @@ import {
   ButtonContent,
   Form,
   FormField,
+  Header,
   Icon,
 } from "semantic-ui-react";
 import { useForm } from "react-hook-form";
 import axios from "axiosInstance";
 import ImageUploader from "Components/Tools/ImageUploader/ImageUploader";
-import { updateComponent } from "MyRedux/slices/Component";
+import { changeCompareComponentProperty, changeComponentProperty, fetchComponent, updateComponent } from "MyRedux/slices/Component";
+import ValueSetter from "Components/Tools/ValueSetter/ValueSetter";
+import Grider from "Components/Tools/Grider/Grider";
 
 function isFileImage(file) {
   return file && file["type"].split("/")[0] === "image";
@@ -21,6 +24,13 @@ function ComponentEdit(props) {
   const currentComponent = useSelector(
     (state) => state.admin.component.currentComponent
   );
+  const currentProperties = useSelector(
+    (state) => state.admin.component.currentProperties
+  );
+  const currentCompareProperties = useSelector(
+    (state) => state.admin.component.currentCompareProperties
+  );
+
   const onBackClick = props.onBackClick;
   const onRemoveClick = props.onRemoveClick;
   const [imageURL, setImageUrl] = React.useState(currentComponent?.Photos[0]);
@@ -41,8 +51,6 @@ function ComponentEdit(props) {
     mode: "onChange",
   });
 
-  
-
   const OnSubmit = async (params) => {
     if (!imageURL) {
       alert("Завантажте картинку");
@@ -55,7 +63,8 @@ function ComponentEdit(props) {
         Photos: [imageURL],
       })
     );
-    alert("Збережено!");
+    await dispatch(fetchComponent(currentComponent.id))
+    
   };
 
   const onChangeFile = async (e) => {
@@ -74,10 +83,81 @@ function ComponentEdit(props) {
     }
   };
 
+  const onValueChanged = async(property, data) => {
+    if(!data.options){
+      await dispatch(changeComponentProperty({componentId: currentComponent.id, propertyId: property.id, boolValue: data.checked}))
+      return;
+    }
+    data.options.forEach(async(item) => {
+      if (item.value === data.value) {
+          await dispatch(changeComponentProperty({componentId: currentComponent.id, propertyId: property.id, propertyValueId: item.key}))
+        return;
+      }
+    });
+  };
+  const onCompareValueChanged = async(property, data, count) => {
+    console.log(count)
+    if(!data.options){
+      await dispatch(changeCompareComponentProperty({componentId: currentComponent.id, propertyId: property.id, boolValue: data.checked, count:count}))
+      return;
+    }
+    data.options.forEach(async(item) => {
+      if (item.value === data.value) {
+          await dispatch(changeCompareComponentProperty({componentId: currentComponent.id, propertyId: property.id, propertyValueId: item.key, count:count}))
+        return;
+      }
+    });
+  };
+
+  const renderProperties = (componentProperties, properties, onValueChange, counted=false) => {
+    return (
+      properties &&
+      properties.map((property, index) => {
+        let row;
+        componentProperties?.forEach((currentValue)=>{
+          if (currentValue?.property?.Name === property.Name){
+            row = <ValueSetter
+                header={property.Name}
+                values={property.values}
+                type={property.type.Name}
+                defaultValue={currentValue.value?.value || currentValue.boolValue}
+                defaultCountValue = {currentValue.count}
+                dataKeys={{ key: "id", value: "value", text: "value" }}
+                onValueChange={(_, data, count) => onValueChange(property, data, count)}
+                onClickCreate={(value) => console.log(value)}
+                counted = {counted && property.isCountable  && property?.category.id === currentComponent?.category.id}
+              />;
+            
+          }
+        })
+        if (row) return row;
+        return (
+          <ValueSetter
+            header={property.Name}
+            values={property.values}
+            type={property.type.Name}
+            dataKeys={{ key: "id", value: "value", text: "value" }}
+            onValueChange={(_, data, count) => onValueChange(property, data, count)}
+            onClickCreate={(value) => console.log(value)}
+            defaultCountValue = {1}
+            counted = {counted && property.isCountable && property?.category.id === currentComponent?.category.id}
+          />
+        );
+      }
+    ));
+  };
+
+  const properties = renderProperties(currentComponent?.properties, currentProperties, onValueChanged);
+  const compareProperties = renderProperties(currentComponent?.compareProperties, currentCompareProperties, onCompareValueChanged, true);
+
   return (
     <div>
       <div className="flex w-full items-center">
-        <Button className=" basis-1/5" labelPosition="right" onClick={onBackClick}>
+        <Button
+          className=" basis-1/5"
+          labelPosition="right"
+          onClick={onBackClick}
+        >
           <ButtonContent>
             <Icon name="angle left" />
           </ButtonContent>
@@ -92,7 +172,11 @@ function ComponentEdit(props) {
           >
             Зберегти
           </Button>
-          <Button onClick={() => onRemoveClick(currentComponent)} color="grey" icon="trash">
+          <Button
+            onClick={() => onRemoveClick(currentComponent)}
+            color="grey"
+            icon="trash"
+          >
             Видалити
           </Button>
         </div>
@@ -101,19 +185,10 @@ function ComponentEdit(props) {
       <ImageUploader onChangeFile={onChangeFile} imageURL={imageURL} />
       <Form>
         <FormField>
-          <label className="text-slate-50">Ім'я:</label>
+          <label className="text-slate-50">Навза:</label>
           <input
             autoFocus
             {...register("Name", { required: "Name is required." })}
-            className="pl-2 w-full border-2 rounded font-normal"
-          />
-        </FormField>
-        <FormField>
-          <label className="text-slate-50">Опис:</label>
-          <textarea
-            {...register("Description", {
-              required: "Description is required.",
-            })}
             className="pl-2 w-full border-2 rounded font-normal"
           />
         </FormField>
@@ -127,8 +202,37 @@ function ComponentEdit(props) {
             step="any"
           />
         </FormField>
-        <div className="flex items-center justify-center mt-5"></div>
+        <FormField>
+          <label className="text-slate-50">Опис:</label>
+          <textarea
+            {...register("Description", {
+              required: "Description is required.",
+            })}
+            className="pl-2 w-full border-2 rounded font-normal"
+          />
+        </FormField>
       </Form>
+      {compareProperties && (
+        <>
+          <Header>Порiвнюванi характеристики</Header>
+          <Grider
+            elements={compareProperties}
+            columns={3}
+            rows={compareProperties.length / 3}
+          />
+        </>
+      )}
+      {properties && (
+        <>
+          <Header>Звичайнi характеристики</Header>
+          <Grider
+            elements={properties}
+            columns={3}
+            rows={properties.length / 3}
+          />
+        </>
+      )}
+      
     </div>
   );
 }

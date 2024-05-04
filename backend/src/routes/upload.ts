@@ -1,6 +1,6 @@
 import multer from "multer";
 import { Express, Request, Response } from "express";
-const { checkAdmin, checkAuth } = require("../middlewares/index.ts");
+const { checkAdmin, checkAuth } = require("../middlewares/index");
 
 const storage = multer.diskStorage({
     destination: (_, __, callback) =>{

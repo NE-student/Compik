@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
 import { Property } from "./Properties/Property";
 import { CompareProperty } from "./Properties/CompareProperties/CompareProperty";
-import { ComponentCountProperty } from "./Properties/CountProperties/ComponentCountProperty";
 
 @Entity()
 export class Type {

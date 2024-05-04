@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express"; 
 const {createValidation, updateValidation} =  require('../validators/propertyValueValidator');
-const {checkAuth, checkAdmin} = require('../middlewares/index.ts');
+const {checkAuth, checkAdmin} = require('../middlewares/index');
 const PropertyValueController = require('../controllers/Properties/PropertyValueController');
 
 export const propertyValue = (app:Express)=>{

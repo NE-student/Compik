@@ -1,6 +1,6 @@
 import { Express } from "express"; 
 const {createValidation, updateValidation} =  require('../validators/categoryValidator');
-const {checkAuth, checkAdmin} = require('../middlewares/index.ts');
+const {checkAuth, checkAdmin} = require('../middlewares/index');
 const CategoryController = require('../controllers/CategoryController');
 
 export const category = (app:Express)=>{

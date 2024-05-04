@@ -5,7 +5,7 @@ import { fetchCategories } from "MyRedux/slices/Category";
 import ComponentView from "./ComponentView/ComponentView";
 import ComponentCreate from "./ComponentCreate/ComponentCreate";
 import ComponentEdit from "./ComponentEdit/ComponentEdit";
-import { fetchComponent, removeComponent } from "MyRedux/slices/Component";
+import { fetchComparePropertiesByCategory, fetchComponent, fetchPropertiesByCategory, removeComponent } from "MyRedux/slices/Component";
 
 const viewState = "view";
 const addState = "add";
@@ -21,7 +21,9 @@ function Component() {
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(fetchCategories());
-  }, [dispatch]);
+    dispatch(fetchPropertiesByCategory(currentCategoryId))
+    dispatch(fetchComparePropertiesByCategory(currentCategoryId))
+  }, [dispatch, currentCategoryId]);
 
   const onComponentClick = async(component)=>{
     await dispatch(fetchComponent(component.id))

@@ -30,7 +30,7 @@ function ComponentView(props) {
   const renderComponents = function(){
     return(
       <Grider
-            elements={componentsData.components.data.map((component, index) => {
+            elements={componentsData.components?.data.map((component, index) => {
               return (
                 <Carder
                   onClick={() => onComponentClick(component)}
@@ -63,7 +63,7 @@ function ComponentView(props) {
           <Divider />
           <div className=" grid grid-cols-2 p-4 min-h-96">
             <div>
-              {componentsData.components?.data &&
+              {
                 renderComponents()
                 }
               {!componentsData.components &&
@@ -83,9 +83,9 @@ function ComponentView(props) {
         </>
       )}
       <div className=" m-auto max-w-lg">
-        {categoriesData.categories?.data && currentCategory === "" && (
+        {currentCategory === "" && (
           <Grider
-            elements={categoriesData.categories.data.map((category, index) => {
+            elements={categoriesData.categories?.data.map((category, index) => {
               return (
                 <Carder
                   onClick={() => onCategoryClick(category.Name, category.id)}

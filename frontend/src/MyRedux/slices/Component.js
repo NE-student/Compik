@@ -1,13 +1,41 @@
 import axios from "../../axiosInstance"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+
+export const fetchPropertiesByCategory = createAsyncThunk("component/fetchPropertiesByCategory", async(id) =>{
+    const {data} = await axios.get("component/properties/" + id).catch(function (error) {
+        console.log(error.toJSON());
+      });
+    return data;
+})
+
+export const changeComponentProperty = createAsyncThunk("component/changeComponentProperty", async(params) =>{
+    const {data} = await axios.post("component/property", params).catch((error) => {
+        console.log(error);
+      });
+    return data;
+})
+
+export const fetchComparePropertiesByCategory = createAsyncThunk("component/fetchComparePropertiesByCategory", async(id) =>{
+    const {data} = await axios.get("component/compare/properties/" + id).catch(function (error) {
+        console.log(error.toJSON());
+      });
+    return data;
+})
+
+export const changeCompareComponentProperty = createAsyncThunk("component/changeCompareComponentProperty", async(params) =>{
+    const {data} = await axios.post("component/compare/property", params).catch((error) => {
+        console.log(error);
+      });
+    return data;
+})
+
 export const fetchComponent = createAsyncThunk("component/fetchComponent", async(id) =>{
     const {data} = await axios.get("component/" + id).catch(function (error) {
         console.log(error.toJSON());
       });
     return data;
 })
-
 
 export const fetchComponents = createAsyncThunk("component/fetchComponents", async(params) =>{
     const {data} = await axios.post("components/" + params.page, params).catch(function (error) {
@@ -40,6 +68,8 @@ export const removeComponent = createAsyncThunk("component/removeComponent", asy
 
 const initialState = {
     currentComponent: null,
+    currentProperties: null,
+    currentCompareProperties: null,
     components: null,
     loading: false,
     error: null,
@@ -59,6 +89,39 @@ export const componentSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
+        
+        //Get properties
+        builder.addCase(fetchComparePropertiesByCategory.pending, (state) =>{
+            state.currentCompareProperties = null;
+            state.error = null;
+            state.loading = true;
+        });
+        builder.addCase(fetchComparePropertiesByCategory.fulfilled, (state, action) =>{
+            state.currentCompareProperties = action.payload.data;
+            state.loading = false;
+        });
+        builder.addCase(fetchComparePropertiesByCategory.rejected, (state, action) =>{
+            state.error = action.payload;
+            state.loading = false;
+        });
+
+
+        //Get properties
+        builder.addCase(fetchPropertiesByCategory.pending, (state) =>{
+            state.currentProperties = null;
+            state.error = null;
+            state.loading = true;
+        });
+        builder.addCase(fetchPropertiesByCategory.fulfilled, (state, action) =>{
+            state.currentProperties = action.payload.data;
+            state.loading = false;
+        });
+        builder.addCase(fetchPropertiesByCategory.rejected, (state, action) =>{
+            state.error = action.payload;
+            state.loading = false;
+        });
+
+
         //Get
         builder.addCase(fetchComponent.pending, (state) =>{
             state.currentComponent = null;
@@ -112,7 +175,7 @@ export const componentSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(updateComponent.fulfilled, (state, action) =>{
-            state.currentComponent = action.payload.component;
+            // state.currentComponent = action.payload.component;
             state.loading = false;
         });
         builder.addCase(updateComponent.rejected, (state, action) =>{

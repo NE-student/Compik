@@ -3,6 +3,7 @@ import { Type } from "../../Type";
 import { Category } from "../../Category";
 import { ComparePropertyValue } from "./ComparePropertyValue";
 import { ComponentCompareProperty } from "./ComponentCompareProperty";
+import { ComparePropertyImpactCategory } from "./ComparePropertyImpactCategory";
 
 
 
@@ -11,8 +12,14 @@ export class CompareProperty{
     @PrimaryGeneratedColumn()
     id: number
 
+    @Column({type:"character varying", unique:true, length:100})
+    Name: string
+
     @Column({type:"character varying"})
-    name: string
+    Description: string
+
+    @Column({nullable: true, default: false})
+    isCountable: boolean
     
     @ManyToOne(() => Type, type => type.compareProperties)
     type: Type
@@ -20,8 +27,8 @@ export class CompareProperty{
     @ManyToOne(() => Category, category => category.compareProperties)
     category: Category
     
-    @ManyToOne(() => Category, category => category.impactCompareProperties)
-    impactCategory: Category
+    @OneToMany(() => ComparePropertyImpactCategory, cpic => cpic.property, {nullable:true})
+    impactCategories: ComparePropertyImpactCategory[]
 
     @OneToMany(() => ComparePropertyValue, value => value.property)
     values: ComparePropertyValue[]

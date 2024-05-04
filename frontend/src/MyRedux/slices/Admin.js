@@ -4,6 +4,9 @@ import { propertySlice } from "./Property";
 import { propertyValueSlice } from "./PropertyValue";
 import { categorySlice } from "./Category";
 import { componentSlice } from "./Component";
+import { comparePropertySlice } from "./CompareProperty";
+import { comparePropertyValueSlice } from "./ComparePropertyValue";
+import { comparePropertyImpactCategorySlice } from "./ComparePropertyImpactCategory";
 
 
 
@@ -26,7 +29,7 @@ const adminSlice = createSlice({
 
 
 
-export const adminReducer = combineSlices(adminSlice, typeSlice, propertySlice, propertyValueSlice, categorySlice, componentSlice);
+export const adminReducer = combineSlices(adminSlice, typeSlice, propertySlice, propertyValueSlice, categorySlice, componentSlice, comparePropertySlice, comparePropertyValueSlice, comparePropertyImpactCategorySlice);
 export const selectCurrentAdminMenu = state => state.admin.adminRoot.currentMenu;
 
 export const {switchMenu} = adminSlice.actions;

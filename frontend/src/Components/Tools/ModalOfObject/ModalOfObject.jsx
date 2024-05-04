@@ -72,8 +72,9 @@ function ModalOfObject(props) {
                             <FormField key={index} className="">
                                 <label className="text-slate-50">{field.name}:</label><br />
                                 <input
+                                    type={field.type}
                                     {...register(field.name, field.options)}
-                                    className="pl-2 min-h-9 w-1/2 border-2 rounded font-normal"
+                                    className="pl-2 min-h-9 border-2 rounded font-normal"
                                     placeholder={field.placeholder}
                                 />
                             </FormField>
