@@ -1,7 +1,9 @@
+import { property } from './../routes/property';
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { validationResult } from "express-validator";
 import { Component } from "../entity/Сomponent";
+import { In } from 'typeorm';
 
 
 const componentRepository = AppDataSource.getRepository(Component)
@@ -56,8 +58,22 @@ export const getComponentsByFilter = async (req: Request, res: Response) => {
         let components;
 
         const filters = req.body.filters;
-        console.log(req.body)
+        let chosenComponents = Array<Component>();
+        if(req.body.components.length > 0){
+            chosenComponents = await componentRepository
+            .find({
+                relations: {
+                    compareProperties:{
+                        property:true,
+                        value:true
+                    }
+                },
+                where:{
+                    id: In(req.body.components),
+                }
+            })
 
+        }
 
         let whereCondition = "component.category.id = :id";
         var whereObj: { [k: string]: any } = { id: req.body.category };
@@ -78,27 +94,38 @@ export const getComponentsByFilter = async (req: Request, res: Response) => {
         if (filters) {
             components = components.map((comp: any) => {
                 if(comp.Price < filters.price.minNumber || comp.Price > filters.price.maxNumber) return undefined;
-                for (let i = 0; i < comp.properties.length; i++) {
-                    const exist = filters.properties.hasOwnProperty(comp.properties[i].property.id)
-                    const value = filters.properties[comp.properties[i].property.id]
-                    if (exist && comp.properties[i]?.value?.id !== value) {
-                        if (comp.properties[i].boolValue != value) return undefined;
+                for (const [idProperty, value] of Object.entries<[number, number]>(filters.properties)) {
+                    for (let i = 0; i < comp.properties.length; i++) {
+                        if(comp.properties[i].property.id == idProperty && comp.properties[i]?.value?.id !== value){
+                            if (comp.properties[i].boolValue != value) return undefined;
+                        }
                     }
                 }
-                for (let i = 0; i < comp.compareProperties.length; i++) {
-                    const exist = filters.compareProperties.hasOwnProperty(comp.compareProperties[i].property.id)
-                    const value = filters.compareProperties[comp.compareProperties[i].property.id]
-                    if (exist && comp.compareProperties[i]?.value?.id !== value) {
-                        if (comp.compareProperties[i].boolValue != value) return undefined;
-                    }
-                }
-                for (let i = 0; i < comp.compareProperties.length; i++) {
-                    for (const [_, compProps] of Object.entries<[string, Object]>(filters.additionalCompareProperties)) {
-                        console.log(compProps)
-                        const exist = compProps.hasOwnProperty(comp.compareProperties[i].property.id)
-                        const value = compProps[comp.compareProperties[i].property.id]
-                        if (exist && comp.compareProperties[i]?.value?.id !== value) {
+                for (const [idCompareProperty, value] of Object.entries<[number, number]>(filters.compareProperties)) {
+                    for (let i = 0; i < comp.compareProperties.length; i++) {
+                        if(comp.compareProperties[i].property.id == idCompareProperty && comp.compareProperties[i]?.value?.id !== value){
                             if (comp.compareProperties[i].boolValue != value) return undefined;
+                        }
+                    }
+                }
+                
+                return comp;
+            })
+        }
+        if(chosenComponents && chosenComponents.length > 0){
+            components = components.map((comp: any) => {
+                
+                for( let i = 0; i < chosenComponents.length; i++){
+                    const ccomp = chosenComponents[i]
+                    for (let j = 0; j < ccomp.compareProperties.length; j++) {
+                        const cproperty = ccomp.compareProperties[j];
+                        for (let k = 0; k < comp.compareProperties.length; k++) {
+                            if(comp.compareProperties[k].property.id == cproperty.property.id ){
+                                if(comp.compareProperties[k]?.value && comp.compareProperties[k]?.value?.id !== cproperty.value.id)
+                                    return undefined
+                                
+                                if (comp.compareProperties[k].boolValue != cproperty.boolValue) return undefined;
+                            }
                         }
                     }
                 }

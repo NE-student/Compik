@@ -15,6 +15,6 @@ export class ComparePropertyValue{
     @OneToMany(() => ComponentCompareProperty, ccp => ccp.value)
     componentsCompareProperty: ComponentCompareProperty[]
 
-    @ManyToOne(() => CompareProperty, property => property.values)
+    @ManyToOne(() => CompareProperty, property => property.values, {onDelete:"CASCADE", onUpdate:"CASCADE"})
     property: CompareProperty
 }

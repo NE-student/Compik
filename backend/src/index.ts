@@ -12,6 +12,7 @@ import { component } from "./routes/component";
 import { compareProperty } from "./routes/compareProperty";
 import { comparePropertyValue } from "./routes/comparePropertyValue";
 import { comparePropertyImpactCategory } from "./routes/comparePropertyImpactCategory";
+import { configuration } from "./routes/configuration";
 
 //Database connect and initialize
 AppDataSource.initialize().then(() => {
@@ -42,6 +43,7 @@ compareProperty(app);
 comparePropertyValue(app);
 comparePropertyImpactCategory(app);
 component(app);
+configuration(app);
 
 //Starting server
 app.listen(4444, ()=>{

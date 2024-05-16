@@ -79,11 +79,7 @@ export const createCategory = async(req: Request, res: Response) =>{
 
         return res.status(201).json({
             success:true,
-            property: {
-                id: category.id,
-                Name: category.Name,
-                Description: category.Description,     
-            }
+            category
     });
     }
     catch(err:any){

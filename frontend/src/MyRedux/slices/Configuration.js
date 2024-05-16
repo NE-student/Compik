@@ -30,6 +30,13 @@ export const fetchComponents = createAsyncThunk("configuration/fetchComponents",
     return data;
 })
 
+export const saveConfiguration = createAsyncThunk("configuration/saveConfiguration", async(params) =>{
+    const {data} = await axios.post("configuration/", params).catch(function (error) {
+        console.log(error.toJSON());
+      });
+    return data;
+})
+
 const initialState = {
     properties: null,
     compareProperties: null,
@@ -55,13 +62,6 @@ const configurationSlice = createSlice({
             state.filters.properties = initialState.filters.properties;
             state.filters.compareProperties = initialState.filters.compareProperties;
             state.filters.price = initialState.filters.price;
-            state.filters.additionalCompareProperties[action.payload.category] = {}
-            for (const [_, comp] of Object.entries(state.configurationComponents)) {
-                console.log(comp.compareProperties);
-                comp.compareProperties.forEach((compareProperty)=>{
-                    state.filters.additionalCompareProperties[action.payload.category][compareProperty.property?.id] = compareProperty.value?.id || compareProperty.boolValue
-                })
-              }
         },
         addFilter: (state, action) =>{
             state.filters[action.payload.type][action.payload.property] = action.payload.propertyValue
@@ -79,6 +79,21 @@ const configurationSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
+        //Save configuration
+        builder.addCase(saveConfiguration.pending, (state) =>{
+            state.error = null;
+            state.loading = true;
+        });
+        builder.addCase(saveConfiguration.fulfilled, (state, action) =>{
+            state.configurationComponents = initialState.configurationComponents;
+            state.filters = initialState.filters;
+            state.currentCategory = initialState.currentCategory;
+            state.loading = false;
+        });
+        builder.addCase(saveConfiguration.rejected, (state, action) =>{
+            state.error = action.payload;
+            state.loading = false;
+        });
 
         //Paginate
         builder.addCase(fetchComponents.pending, (state) =>{

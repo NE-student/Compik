@@ -18,9 +18,6 @@ function Verification() {
   const isAuth = useSelector(selectIsAuth);
   const Nickname = useSelector((state) => state.auth.user?.Nickname);
 
-  console.log(isAuth);
-  console.log(Nickname);
-
   return (
     <div className="flex-auto flex p-4">
       <div className="mx-auto h-fit py-9 min-w-96 w-1/5 px-16 bg-zinc-600 grid gap-4 grid-cols-1 font-medium content-center rounded-3xl">

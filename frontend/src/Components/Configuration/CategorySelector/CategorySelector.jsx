@@ -28,7 +28,8 @@ function CategorySelector() {
           exist={configurationComponents[element?.id]}
           onClick={async(id) => {
             await dispatch(setCategory(id))
-            await dispatch(fetchComponents({category: id, filters:filters}))
+            await dispatch(fetchComponents({category: id, filters:filters, components: Object.values(configurationComponents).map((component)=>{ return component.id})}));
+            
           }}
         />
       );

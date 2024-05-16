@@ -14,12 +14,6 @@ export class Configuration {
     @Column({type:"character varying", unique:true})
     Description: string
 
-    @Column({type:"int", unique:true})
-    Rate: string
-
-    @Column({type:"money", unique:true})
-    Price: number
-
     @CreateDateColumn()
     created_at: Date
     

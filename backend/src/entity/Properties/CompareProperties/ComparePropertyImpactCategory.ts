@@ -12,10 +12,10 @@ export class ComparePropertyImpactCategory{
     @PrimaryGeneratedColumn()
     id: number
 
-    @ManyToOne(() => CompareProperty, cp => cp.impactCategories)
+    @ManyToOne(() => CompareProperty, cp => cp.impactCategories, {onDelete:"CASCADE", onUpdate:"CASCADE"})
     property: CompareProperty
     
-    @ManyToOne(() => Category, category => category.impactCompareProperties)
+    @ManyToOne(() => Category, category => category.impactCompareProperties, {onDelete:"CASCADE", onUpdate:"CASCADE"})
     category: Category
     
 

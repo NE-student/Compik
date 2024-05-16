@@ -10,6 +10,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { fetchAuthMe } from "MyRedux/slices/Auth";
 import Footer from "./Components/Footer/Footer";
+import Profile from "Components/User/Profile/Profile";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Configuration />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/login" element={<Login />} />
         <Route path="/emailVerify" element={<Verification />} />

@@ -16,7 +16,7 @@ export class ComponentCompareProperty{
     @Column({nullable: false, default: 1})
     count: number
 
-    @ManyToOne(() => Component, component => component.compareProperties, {onDelete:"CASCADE", onUpdate:"CASCADE"})
+    @ManyToOne(() => Component, component => component.compareProperties)
     component: Component
 
     @ManyToOne(() => ComparePropertyValue, value => value.componentsCompareProperty)

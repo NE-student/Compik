@@ -21,10 +21,10 @@ export class CompareProperty{
     @Column({nullable: true, default: false})
     isCountable: boolean
     
-    @ManyToOne(() => Type, type => type.compareProperties)
+    @ManyToOne(() => Type, type => type.compareProperties, {onDelete:"CASCADE", onUpdate:"CASCADE"})
     type: Type
     
-    @ManyToOne(() => Category, category => category.compareProperties)
+    @ManyToOne(() => Category, category => category.compareProperties, {onDelete:"CASCADE", onUpdate:"CASCADE"})
     category: Category
     
     @OneToMany(() => ComparePropertyImpactCategory, cpic => cpic.property, {nullable:true})
