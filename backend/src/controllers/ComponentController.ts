@@ -59,19 +59,25 @@ export const getComponentsByFilter = async (req: Request, res: Response) => {
 
         const filters = req.body.filters;
         let chosenComponents = Array<Component>();
-        if(req.body.components.length > 0){
+        if (req.body.components.length > 0) {
             chosenComponents = await componentRepository
-            .find({
-                relations: {
-                    compareProperties:{
-                        property:true,
-                        value:true
+                .find({
+                    relations: {
+                        category: true,
+                        compareProperties: {
+                            property: {
+                                category: true,
+                                impactCategories: {
+                                    category: true
+                                }
+                            },
+                            value: true
+                        }
+                    },
+                    where: {
+                        id: In(req.body.components),
                     }
-                },
-                where:{
-                    id: In(req.body.components),
-                }
-            })
+                })
 
         }
 
@@ -83,9 +89,11 @@ export const getComponentsByFilter = async (req: Request, res: Response) => {
             .leftJoinAndSelect("component.category", "category")
             .leftJoinAndSelect("component.properties", "properties")
             .leftJoinAndSelect("properties.property", "property")
+            .leftJoinAndSelect("property.type", "type")
             .leftJoinAndSelect("properties.value", "value")
             .leftJoinAndSelect("component.compareProperties", "compareProperties")
             .leftJoinAndSelect("compareProperties.property", "compareProperty")
+            .leftJoinAndSelect("compareProperty.type", "compareType")
             .leftJoinAndSelect("compareProperties.value", "compareValue")
             .where(whereCondition, whereObj)
             .getMany();
@@ -93,45 +101,83 @@ export const getComponentsByFilter = async (req: Request, res: Response) => {
 
         if (filters) {
             components = components.map((comp: any) => {
-                if(comp.Price < filters.price.minNumber || comp.Price > filters.price.maxNumber) return undefined;
+                if (comp.Price < filters.price.minNumber || comp.Price > filters.price.maxNumber) return undefined;
                 for (const [idProperty, value] of Object.entries<[number, number]>(filters.properties)) {
                     for (let i = 0; i < comp.properties.length; i++) {
-                        if(comp.properties[i].property.id == idProperty && comp.properties[i]?.value?.id !== value){
+                        if (comp.properties[i].property.id == idProperty && comp.properties[i]?.value?.id !== value) {
                             if (comp.properties[i].boolValue != value) return undefined;
                         }
                     }
                 }
                 for (const [idCompareProperty, value] of Object.entries<[number, number]>(filters.compareProperties)) {
                     for (let i = 0; i < comp.compareProperties.length; i++) {
-                        if(comp.compareProperties[i].property.id == idCompareProperty && comp.compareProperties[i]?.value?.id !== value){
+                        if (comp.compareProperties[i].property.id == idCompareProperty && comp.compareProperties[i]?.value?.id !== value) {
                             if (comp.compareProperties[i].boolValue != value) return undefined;
                         }
                     }
                 }
-                
+
                 return comp;
             })
         }
-        if(chosenComponents && chosenComponents.length > 0){
-            components = components.map((comp: any) => {
-                
-                for( let i = 0; i < chosenComponents.length; i++){
-                    const ccomp = chosenComponents[i]
+
+        if (chosenComponents && chosenComponents.length > 0) {
+            components = components.map((comp: Component) => {
+                let approved = true;
+                chosenComponents.forEach((ccomp) => {
                     for (let j = 0; j < ccomp.compareProperties.length; j++) {
                         const cproperty = ccomp.compareProperties[j];
+                        const checkImpact = cproperty.property.impactCategories.map((element) => { return element.category.id })
+                        if (checkImpact.includes(ccomp.category.id) && checkImpact.includes(comp.category.id)) continue;
                         for (let k = 0; k < comp.compareProperties.length; k++) {
-                            if(comp.compareProperties[k].property.id == cproperty.property.id ){
-                                if(comp.compareProperties[k]?.value && comp.compareProperties[k]?.value?.id !== cproperty.value.id)
-                                    return undefined
-                                
-                                if (comp.compareProperties[k].boolValue != cproperty.boolValue) return undefined;
+
+                            if (comp.compareProperties[k].property.id == cproperty.property.id) {
+
+                                // string
+                                if (comp.compareProperties[k].property.type.Name === "string") {
+                                    if (comp.compareProperties[k]?.value && comp.compareProperties[k]?.value?.id !== cproperty.value.id) {
+                                        approved = false
+                                        return
+                                    }
+                                }
+
+                                //number
+
+                                if (comp.compareProperties[k].property.type.Name === "number") {
+                                    //main comp
+                                    if (comp.category.id == cproperty.property.category.id) {
+                                        if (+comp.compareProperties[k]?.value.value < +cproperty?.value.value) {
+                                            approved = false
+                                            return
+                                        }
+
+                                    }
+                                    else { // impact comp
+                                        if (+comp.compareProperties[k]?.value.value > +cproperty?.value.value) {
+                                            approved = false
+                                            return
+                                        }
+
+                                    }
+                                }
+
+                                // bool
+                                if (comp.compareProperties[k].property.type.Name === "boolean") {
+                                    if (comp.compareProperties[k].boolValue != cproperty.boolValue) {
+                                        approved = false
+                                        return
+                                    }
+                                }
                             }
                         }
                     }
-                }
-                return comp;
+
+                })
+                return approved ? comp : null
             })
         }
+        components = components.filter((element: Component) => element !== null)
+
 
         if (!components || components.length == 0 || !components[0]) {
             return res.status(404).json({ success: false, message: "Component's weren't found" })

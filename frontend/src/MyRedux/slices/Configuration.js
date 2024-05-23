@@ -53,6 +53,7 @@ const configurationSlice = createSlice({
     reducers: {
         setCategory: (state, action) =>{
             state.currentCategory = action.payload
+            delete state.configurationComponents[state.currentCategory]
             state.filters.properties = initialState.filters.properties;
             state.filters.compareProperties = initialState.filters.compareProperties;
             state.filters.price = initialState.filters.price;
@@ -62,6 +63,7 @@ const configurationSlice = createSlice({
             state.filters.properties = initialState.filters.properties;
             state.filters.compareProperties = initialState.filters.compareProperties;
             state.filters.price = initialState.filters.price;
+            state.currentCategory = null
         },
         addFilter: (state, action) =>{
             state.filters[action.payload.type][action.payload.property] = action.payload.propertyValue

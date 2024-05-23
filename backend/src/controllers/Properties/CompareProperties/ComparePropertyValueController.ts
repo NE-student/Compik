@@ -111,6 +111,7 @@ export const getPropertyValues =  async (req:Request, res:Response) => {
         .createQueryBuilder("compareProperty_values")
         .leftJoinAndSelect("compareProperty_values.property", "property")
         .where("property.id = :id", { id: req.body.id})
+        .orderBy('compareProperty_values.id', 'ASC')
         .limit(itemsPerPage)
         .offset((page - 1) * itemsPerPage)
         .getMany();

@@ -15,6 +15,10 @@ function CategorySelector() {
   );
   const dispatch = useDispatch();
 
+  React.useEffect(()=>{
+    dispatch(fetchComponents({category: currentCategory, filters:filters, components: Object.values(configurationComponents).map((component)=>{ return component.id})}));
+  }, [currentCategory, filters, configurationComponents, dispatch])
+
   let renderData;
   if (data) {
     renderData = data.map((element) => {
@@ -28,7 +32,6 @@ function CategorySelector() {
           exist={configurationComponents[element?.id]}
           onClick={async(id) => {
             await dispatch(setCategory(id))
-            await dispatch(fetchComponents({category: id, filters:filters, components: Object.values(configurationComponents).map((component)=>{ return component.id})}));
             
           }}
         />

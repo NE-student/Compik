@@ -56,6 +56,15 @@ function PropertyView(props) {
     dispatch(fetchTypes());
   }, [dispatch, propertiesData.currentPage]);
 
+  React.useEffect(() => {
+    dispatch(
+      fetchComparePropertyValues({
+        page: propertyValuesData.currentPage,
+        id: PropertyId,
+      })
+    );
+  }, [propertyValuesData.currentPage, PropertyId, dispatch])
+
   const propertyFields = [
     {
       name: "Name",
@@ -69,9 +78,9 @@ function PropertyView(props) {
     },
     {
       name: "isCountable",
-      options: { },
+      options: {},
       placeholder: "",
-      type: "checkbox"
+      type: "checkbox",
     },
   ];
 
@@ -80,13 +89,13 @@ function PropertyView(props) {
       id: 0,
       Name: "",
       Description: "",
-      isCountable: false
+      isCountable: false,
     },
     values: {
       id: PropertyId,
       Name: PropertyName,
       Description: PropertyDescription,
-      isCountable: Property?.isCountable
+      isCountable: Property?.isCountable,
     },
     mode: "onChange",
   });
@@ -100,7 +109,7 @@ function PropertyView(props) {
   };
 
   const onRowClick = async (Property) => {
-    setProperty(Property)
+    setProperty(Property);
     setId(Property.id);
     setName(Property.Name);
     setDescription(Property.Description);

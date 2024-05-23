@@ -63,7 +63,7 @@ export const createConfiguration = async (req: Request, res: Response) => {
         if (!errors.isEmpty()) {
             return res.status(400).json(errors.array());
         }
-        console.log(req.body.components);
+        
         let chosenComponents = Array<Component>();
         if(req.body.components.length > 0){
             chosenComponents = await componentRepository

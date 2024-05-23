@@ -17,8 +17,6 @@ function TableView(props) {
     const currentPage = props.currentPage;
     const isLastPage = props.isLastPage;
     const uniqueKey = props.uniqueKey;
-
-    console.log(ColumnsKeys)
     
     const createRows = (obj, index)=>{
         const rows = [];

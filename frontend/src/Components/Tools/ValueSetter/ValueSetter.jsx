@@ -60,7 +60,7 @@ function ValueSetter(props) {
       )}
       
     </div>
-    {counted && <Button className=" h-1/2" icon="check" onClick={() => onValueChange(state.event, state.data, state.count)}></Button>}
+      <Button icon="check" onClick={() => onValueChange(state.event, state.data, state.count)}></Button>
     </div>
   );
 }
