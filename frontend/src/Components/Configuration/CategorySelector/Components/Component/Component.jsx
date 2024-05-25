@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Component.css";
+import { Icon } from "semantic-ui-react";
 
 function Component(props) {
   const [open, setOpen] = useState(false);
@@ -27,14 +28,28 @@ function Component(props) {
           </button>
         </div>
       </button>
-      
-      {open && 
-      <div className="grid grid-cols-3  p-4 bg-white text-text1">
-        {props.properties.map((prop)=>{
-          const value = (""+prop.value).replace("true","✓").replace("false", "x")
-          return <div>{prop.Name} : <span className="">{value}</span></div>;
-        })}
-      </div>}
+
+      {open && (
+        <div className="grid grid-cols-3  p-4 bg-white text-text1">
+          {props.properties.map((prop) => {
+            const value = ("" + prop.value)
+              .replace("true", "✓")
+              .replace("false", "x");
+            return (
+              <div>
+                {prop.Name}{" "}
+               {prop.Description && <div className="tooltip">
+                  <Icon name="question circle" />
+                  <span className="tooltiptext max-h-28 m-auto">
+                    {prop.Description}
+                  </span>
+                </div>}{" "}
+                : <span className="">{value}</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

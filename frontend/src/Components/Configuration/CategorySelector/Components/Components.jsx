@@ -26,6 +26,7 @@ function Components(props) {
             let obj = { Name: null, value: null };
             obj.Name = p.property.Name;
             obj.value = p.value?.value || p.boolValue;
+            obj.Description = p.property.Description;
             return obj;
           })
         );

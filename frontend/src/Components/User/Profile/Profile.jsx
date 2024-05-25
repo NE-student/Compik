@@ -1,11 +1,17 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./Profile.css";
 import React from "react";
-import { Header } from "semantic-ui-react";
 import Configuration from "./Configuration/Configuration";
+import { fetchAuthMe } from "MyRedux/slices/Auth";
 
 function Profile() {
   const profile = useSelector((state) => state.auth.user);
+
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(fetchAuthMe());
+  }, [dispatch]);
+
   let configurations;
   if (profile?.configurations) {
     configurations = profile.configurations.map((configuration)=>{
@@ -26,7 +32,7 @@ function Profile() {
       </div>
       <div className=" bg-third text-white rounded-sm p-4 grid grid-flow-row gap-4">
         <h1 className=" justify-self-center text-xl"> Конфігурації </h1>
-        <div className=" grid grid-cols-3">
+        <div className=" grid grid-cols-3 gap-4">
             {configurations}
         </div>
       </div>

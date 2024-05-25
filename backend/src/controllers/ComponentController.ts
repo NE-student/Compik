@@ -52,6 +52,102 @@ export const getComponents = async (req: Request, res: Response) => {
 
 }
 
+export const getCountByComponents = async (req: Request, res: Response) => {
+    try {
+        let chosenComponents = Array<Component>();
+
+        if (req.body.components.length == 0) {
+            return res.status(404).json({ success: false, message: "Component's weren't found" })
+        }
+        let count = Object();
+        chosenComponents = await componentRepository
+            .find({
+                relations: {
+                    category: true,
+                    compareProperties: {
+                        property: {
+                            category: true,
+                            type: true,
+                            impactCategories: {
+                                category: true
+                            }
+                        },
+                        value: true
+                    }
+                },
+                where: {
+                    id: In(req.body.components),
+                }
+            })
+        chosenComponents.forEach((chosenComponent) => {
+            chosenComponent.compareProperties.forEach((compareProperty) => {
+                if (compareProperty.property.isCountable) {
+                    const checkImpact = compareProperty.property.impactCategories.map((element) => { return element.category.id })
+                    if (checkImpact.includes(chosenComponent.category.id)) return;
+                    if (compareProperty.property.type.Name === "boolean" && compareProperty.boolValue == false) return
+
+                    compareProperty.property.impactCategories.forEach((impactCategory) => {
+
+                        const impactComponent = chosenComponents.find((component) => component.category.id == impactCategory.category.id)
+                        const impactProperty = impactComponent?.compareProperties.find((property) => property.property.id == compareProperty.property.id)
+                        if (impactComponent && !impactProperty) return;
+
+                        if (impactProperty) {
+                            if (impactProperty.property.type.Name === "string") {
+                                if (impactProperty.value.value !== compareProperty.value.value) return
+                                else {
+                                    if (count[impactCategory.category.id] && count[impactCategory.category.id] < compareProperty.count) return
+                                    count[impactCategory.category.id] = compareProperty.count;
+                                    return
+                                }
+                            }
+                            if (impactProperty.property.type.Name === "number") {
+                                if (+impactProperty.value.value > +compareProperty?.value.value) return
+                                else {
+                                    if (count[impactCategory.category.id] && count[impactCategory.category.id] < compareProperty.count) return
+                                    count[impactCategory.category.id] = compareProperty.count;
+                                    return
+                                }
+                            }
+
+                            if (impactProperty.property.type.Name === "boolean") {
+
+                                console.log("DADAD", impactCategory.category)
+                                if (impactProperty.boolValue !== compareProperty.boolValue) return
+                                else {
+                                    if (count[impactCategory.category.id] && count[impactCategory.category.id] < compareProperty.count) return
+                                    count[impactCategory.category.id] = compareProperty.count;
+                                    return
+                                }
+                            }
+                        }
+
+
+
+                        if (count[impactCategory.category.id] && count[impactCategory.category.id] < compareProperty.count) return
+                        count[impactCategory.category.id] = compareProperty.count
+                    })
+
+                }
+            })
+
+        })
+
+
+
+        var json = JSON.stringify({ data: count, success: true });
+        res.writeHead(200, { 'content-type': 'application/json', 'content-length': Buffer.byteLength(json) });
+        res.end(json);
+    }
+    catch (err: any) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Something went wrong... Try again later.",
+            detail: err.detail
+        });
+    }
+}
+
 export const getComponentsByFilter = async (req: Request, res: Response) => {
     try {
         if (!req.body.category) { return res.status(404).json({ success: false, message: "Component's weren't found" }) }
@@ -128,7 +224,6 @@ export const getComponentsByFilter = async (req: Request, res: Response) => {
                     for (let j = 0; j < ccomp.compareProperties.length; j++) {
                         const cproperty = ccomp.compareProperties[j];
                         const checkImpact = cproperty.property.impactCategories.map((element) => { return element.category.id })
-                        if (checkImpact.includes(ccomp.category.id) && checkImpact.includes(comp.category.id)) continue;
                         for (let k = 0; k < comp.compareProperties.length; k++) {
 
                             if (comp.compareProperties[k].property.id == cproperty.property.id) {
@@ -145,6 +240,7 @@ export const getComponentsByFilter = async (req: Request, res: Response) => {
 
                                 if (comp.compareProperties[k].property.type.Name === "number") {
                                     //main comp
+                                    if (checkImpact.includes(ccomp.category.id) && checkImpact.includes(comp.category.id)) continue;
                                     if (comp.category.id == cproperty.property.category.id) {
                                         if (+comp.compareProperties[k]?.value.value < +cproperty?.value.value) {
                                             approved = false
@@ -272,6 +368,7 @@ export const createComponent = async (req: Request, res: Response) => {
                 Description: component.Description,
                 Photos: component.Photos,
                 Price: component.Price,
+                category: component.category
             }
         });
     }

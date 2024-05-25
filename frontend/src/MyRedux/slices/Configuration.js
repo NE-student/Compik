@@ -30,6 +30,13 @@ export const fetchComponents = createAsyncThunk("configuration/fetchComponents",
     return data;
 })
 
+export const fetchCountByComponents = createAsyncThunk("configuration/fetchCountByComponents", async(params) =>{
+    const {data} = await axios.post("countByComponents/", params).catch(function (error) {
+        console.log(error.toJSON());
+      });
+    return data;
+})
+
 export const saveConfiguration = createAsyncThunk("configuration/saveConfiguration", async(params) =>{
     const {data} = await axios.post("configuration/", params).catch(function (error) {
         console.log(error.toJSON());
@@ -38,11 +45,12 @@ export const saveConfiguration = createAsyncThunk("configuration/saveConfigurati
 })
 
 const initialState = {
+    count: null,
     properties: null,
     compareProperties: null,
     components: null,
     configurationComponents: {},
-    filters : {properties:{}, compareProperties:{}, additionalCompareProperties:{}, price:{minNumber:0, maxNumber:100000}},
+    filters : {properties:{}, compareProperties:{}, price:{minNumber:0, maxNumber:100000}},
     currentCategory: null,
     categories :null,
 };
@@ -60,6 +68,9 @@ const configurationSlice = createSlice({
         },
         addComponent: (state, action) =>{
             state.configurationComponents[action.payload.category] = action.payload.component;
+
+            action.payload.component?.compareProperties.forEach((property) => console.log(property))
+
             state.filters.properties = initialState.filters.properties;
             state.filters.compareProperties = initialState.filters.compareProperties;
             state.filters.price = initialState.filters.price;
@@ -97,7 +108,7 @@ const configurationSlice = createSlice({
             state.loading = false;
         });
 
-        //Paginate
+        //Get components
         builder.addCase(fetchComponents.pending, (state) =>{
             state.components = null;
             state.error = null;
@@ -108,6 +119,21 @@ const configurationSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(fetchComponents.rejected, (state, action) =>{
+            state.error = action.payload;
+            state.loading = false;
+        });
+
+        //Get count
+        builder.addCase(fetchCountByComponents.pending, (state) =>{
+            state.count = null;
+            state.error = null;
+            state.loading = true;
+        });
+        builder.addCase(fetchCountByComponents.fulfilled, (state, action) =>{
+            state.count = action.payload;
+            state.loading = false;
+        });
+        builder.addCase(fetchCountByComponents.rejected, (state, action) =>{
             state.error = action.payload;
             state.loading = false;
         });
@@ -143,6 +169,7 @@ const configurationSlice = createSlice({
             state.loading = false;
         });
 
+        //Get categories
         builder.addCase(fetchCategories.pending, (state) =>{
             state.categories = null;
             state.error = null;

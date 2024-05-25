@@ -13,6 +13,7 @@ export const component = (app:Express)=>{
     app.post('/component/property', checkAuth, checkAdmin, ComponentPropertyController.createComponentProperty)
 
     app.post('/componentsByFilters/', ComponentController.getComponentsByFilter)
+    app.post('/countByComponents/', ComponentController.getCountByComponents)
     
     app.get('/component/compare/properties/:category', ComparePropertyController.getComparePropertiesByCategory)
     app.post('/component/compare/property', checkAuth, checkAdmin, ComponentComparePropertyController.createComponentProperty)

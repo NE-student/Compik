@@ -3,13 +3,14 @@ import "./CategorySelector.css";
 import Components from "./Components/Components";
 import React from "react";
 import Category from "./Category/Category";
-import { setCategory } from "MyRedux/slices/Configuration";
+import { fetchCountByComponents, setCategory } from "MyRedux/slices/Configuration";
 import { fetchComponents } from "MyRedux/slices/Configuration";
 
 function CategorySelector() {
   const data = useSelector((state) => state.configuration.categories?.data);
   const filters = useSelector((state) => state.configuration.filters)
   const configurationComponents = useSelector((state) => state.configuration.configurationComponents)
+  const count = useSelector((state) => state.configuration.count)
   const currentCategory = useSelector(
     (state) => state.configuration.currentCategory
   );
@@ -17,6 +18,7 @@ function CategorySelector() {
 
   React.useEffect(()=>{
     dispatch(fetchComponents({category: currentCategory, filters:filters, components: Object.values(configurationComponents).map((component)=>{ return component.id})}));
+    dispatch(fetchCountByComponents({components: Object.values(configurationComponents).map((component)=>{ return component.id})}))
   }, [currentCategory, filters, configurationComponents, dispatch])
 
   let renderData;
@@ -24,12 +26,14 @@ function CategorySelector() {
     renderData = data.map((element) => {
       const Name = configurationComponents[element?.id]?.Name || element.Name
       const Photos = configurationComponents[element?.id]?.Photos[0] || element.Photos;
+
       return (
         <Category
           id={element.id}
           Name={Name}
           Photos={Photos}
           exist={configurationComponents[element?.id]}
+          count = {count?.data[element?.id] || 0}
           onClick={async(id) => {
             await dispatch(setCategory(id))
             
