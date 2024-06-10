@@ -19,7 +19,7 @@ function CategorySelector() {
   React.useEffect(()=>{
     dispatch(fetchComponents({category: currentCategory, filters:filters, components: Object.values(configurationComponents).map((component)=>{ return component.id})}));
     dispatch(fetchCountByComponents({components: Object.values(configurationComponents).map((component)=>{ return component.id})}))
-  }, [currentCategory, filters, configurationComponents, dispatch])
+  }, [currentCategory, configurationComponents, dispatch])
 
   let renderData;
   if (data) {

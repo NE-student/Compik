@@ -112,7 +112,7 @@ export const getCountByComponents = async (req: Request, res: Response) => {
 
                             if (impactProperty.property.type.Name === "boolean") {
 
-                                console.log("DADAD", impactCategory.category)
+                                
                                 if (impactProperty.boolValue !== compareProperty.boolValue) return
                                 else {
                                     if (count[impactCategory.category.id] && count[impactCategory.category.id] < compareProperty.count) return
@@ -154,8 +154,9 @@ export const getComponentsByFilter = async (req: Request, res: Response) => {
         let components;
 
         const filters = req.body.filters;
+        console.log(filters)
         let chosenComponents = Array<Component>();
-        if (req.body.components.length > 0) {
+        if (req.body?.components?.length > 0) {
             chosenComponents = await componentRepository
                 .find({
                     relations: {
@@ -197,18 +198,20 @@ export const getComponentsByFilter = async (req: Request, res: Response) => {
 
         if (filters) {
             components = components.map((comp: any) => {
+
+
                 if (comp.Price < filters.price.minNumber || comp.Price > filters.price.maxNumber) return undefined;
                 for (const [idProperty, value] of Object.entries<[number, number]>(filters.properties)) {
                     for (let i = 0; i < comp.properties.length; i++) {
                         if (comp.properties[i].property.id == idProperty && comp.properties[i]?.value?.id !== value) {
-                            if (comp.properties[i].boolValue != value) return undefined;
+                            if (comp.properties[i].boolValue != value) return null;
                         }
                     }
                 }
                 for (const [idCompareProperty, value] of Object.entries<[number, number]>(filters.compareProperties)) {
                     for (let i = 0; i < comp.compareProperties.length; i++) {
                         if (comp.compareProperties[i].property.id == idCompareProperty && comp.compareProperties[i]?.value?.id !== value) {
-                            if (comp.compareProperties[i].boolValue != value) return undefined;
+                            if (comp.compareProperties[i].boolValue != value) return null;
                         }
                     }
                 }
@@ -274,6 +277,7 @@ export const getComponentsByFilter = async (req: Request, res: Response) => {
         }
         components = components.filter((element: Component) => element !== null)
 
+        
 
         if (!components || components.length == 0 || !components[0]) {
             return res.status(404).json({ success: false, message: "Component's weren't found" })

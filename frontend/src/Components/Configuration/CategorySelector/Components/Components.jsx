@@ -12,7 +12,7 @@ function Components(props) {
   if (components) {
     data = components.map((element) => {
       let properties;
-      if (element.properties) {
+      if (element?.properties) {
         properties = element.properties.map((p) => {
           let obj = { Name: null, value: null };
           obj.Name = p.property.Name;
@@ -20,7 +20,7 @@ function Components(props) {
           return obj;
         });
       }
-      if (element.compareProperties) {
+      if (element?.compareProperties) {
         properties = properties.concat(
           element.compareProperties.map((p) => {
             let obj = { Name: null, value: null };

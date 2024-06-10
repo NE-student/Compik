@@ -5,12 +5,14 @@ import Filter from "./Filter/Filter";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchComponents, setMaxPrice, setMinPrice } from "MyRedux/slices/Configuration";
 
-function Filters(props) {
+function Filters() {
+
   const currentCategory = useSelector(
     (state) => state.configuration.currentCategory
   );
+
   const categories = useSelector((state) => state.configuration.categories?.data)
-  const categoryName = categories?.find((element) => element.id == currentCategory)?.Name || ""
+  const categoryName = categories?.find((element) => element.id === currentCategory)?.Name || ""
   const filters = useSelector(state => state.configuration.filters)
   const properties = useSelector(state => state.configuration.properties)
   const compareProperties = useSelector(state => state.configuration.compareProperties)
